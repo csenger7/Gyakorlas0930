@@ -260,56 +260,13 @@ namespace LinqGyakorlo
         // 16. Háromtáblás Join: hallgató neve, kurzus neve, érdemjegy.
         static void Feladat16()
         {
-            var result = SampleData.Enrollments
-                .Join(SampleData.Students,
-                      e => e.StudentId,
-                      s => s.Id,
-                      (e, s) => new { e, s })
-                .Join(SampleData.Courses,
-                      es => es.e.CourseId,
-                      c => c.Id,
-                      (es, c) => new { StudentName = es.s.Name, CourseName = c.Name, Grade = es.e.Grade })
-                .ToList();
-
-            foreach (var item in result)
-            {
-                Console.WriteLine($"{item.StudentName} - {item.CourseName}: {item.Grade}");
-            }
+         
         }
 
         // 17. GroupJoin: hallgatónként a beiratkozásai (azok is, akiknek nincs).
         static void Feladat17()
         {
-            var result = SampleData.Students
-                .GroupJoin(SampleData.Enrollments,
-                           s => s.Id,
-                           e => e.StudentId,
-                           (s, enrollments) => new
-                           {
-                               StudentName = s.Name,
-                               Enrollments = enrollments.Select(en => new
-                               {
-                                   CourseName = SampleData.Courses.First(c => c.Id == en.CourseId).Name,
-                                   en.Grade
-                               }).ToList()
-                           })
-                .ToList();
-
-            foreach (var item in result)
-            {
-                Console.WriteLine(item.StudentName + ":");
-                if (!item.Enrollments.Any())
-                {
-                    Console.WriteLine("  (nincs beiratkozás)");
-                }
-                else
-                {
-                    foreach (var en in item.Enrollments)
-                    {
-                        Console.WriteLine($"  {en.CourseName} - Grade: {en.Grade}");
-                    }
-                }
-            }
+          
         }
 
         // ---------- 6. Halmazműveletek — Distinct, Union, Intersect, Except, Concat, Zip ----------
@@ -347,26 +304,7 @@ namespace LinqGyakorlo
         // 20. Union, Intersect, Except a "kiváló" (átlag >= 4.5) és "budapesti" hallgatók nevei között.
         static void Feladat20()
         {
-            var kivalo = SampleData.Students
-                .Where(s => s.GradeAverage >= 4.5)
-                .Select(s => s.Name);
-
-            var budapesti = SampleData.Students
-                .Where(s => s.City == "Budapest")
-                .Select(s => s.Name);
-
-            var union = kivalo.Union(budapesti).ToList();
-            var intersect = kivalo.Intersect(budapesti).ToList();
-            var except = kivalo.Except(budapesti).ToList();
-
-            Console.WriteLine("Union:");
-            foreach (var name in union) Console.WriteLine(name);
-
-            Console.WriteLine("\nIntersect:");
-            foreach (var name in intersect) Console.WriteLine(name);
-
-            Console.WriteLine("\nExcept (kiváló  budapesti):");
-            foreach (var name in except) Console.WriteLine(name);
+            
         }
 
         // 21. Concat: Matematika + Informatika kurzusnevek.
